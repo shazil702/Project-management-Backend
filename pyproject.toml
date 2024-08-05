@@ -16,6 +16,7 @@ psycopg2 = "^2.9.9"
 phonenumbers = "^8.13.40"
 pillow = "^10.4.0"
 python-decouple = "^3.8"
+pytest-django = "^4.8.0"
 
 
 [build-system]
