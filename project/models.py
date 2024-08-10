@@ -13,3 +13,11 @@ class Projects(models.Model):
     
     def __str__(self):
         return self.projectName
+    
+class Team(models.Model):
+    teamName = models.CharField(max_length=255)
+    tl = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='teamLead')
+    teamMembers = models.ManyToManyField(User, related_name='teamMember')
+
+    def __str__(self):
+        return self.teamName
