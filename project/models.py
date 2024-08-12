@@ -31,8 +31,7 @@ class Projects(models.Model):
     status = models.CharField(max_length=25, choices=statusChoices, default='notStarted')
     dueDate = models.DateField()
     team = models.ForeignKey(Team, related_name='team', on_delete=models.DO_NOTHING, null=True, blank=True)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='projects')
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='projects', null=True, blank=True)
     
     def __str__(self):
         return self.projectName
-    
