@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from phonenumber_field.modelfields import PhoneNumberField
 
 User = get_user_model()
 
@@ -10,6 +11,17 @@ class Team(models.Model):
 
     def __str__(self):
         return self.teamName
+
+class Client(models.Model):
+    clientName = models.CharField(max_length=255)
+    company = models.CharField(max_length=300)
+    clientPhone = PhoneNumberField(unique=True)
+    clientEmail = models.EmailField(unique=True)
+    clientAdress = models.TextField()
+
+    def __str__(self):
+        return self.clientName
+
     
 class Projects(models.Model):
     statusChoices = [('notStarted', 'Not Started'), ('inProgress', 'In Progress'), ('completed', 'Completed')]
@@ -19,6 +31,7 @@ class Projects(models.Model):
     status = models.CharField(max_length=25, choices=statusChoices, default='notStarted')
     dueDate = models.DateField()
     team = models.ForeignKey(Team, related_name='team', on_delete=models.DO_NOTHING, null=True, blank=True)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='projects')
     
     def __str__(self):
         return self.projectName
