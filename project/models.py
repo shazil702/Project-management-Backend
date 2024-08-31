@@ -6,7 +6,7 @@ User = get_user_model()
 
 class Team(models.Model):
     teamName = models.CharField(max_length=255)
-    tl = models.OneToOneField(User, on_delete=models.DO_NOTHING, related_name='teamLead', limit_choices_to={'is_tl':True})
+    tl = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='teamLead', limit_choices_to={'is_tl':True})
     teamMembers = models.ManyToManyField(User, related_name='teamMember',limit_choices_to={'is_employee':True})
 
     def __str__(self):

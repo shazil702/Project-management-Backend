@@ -11,6 +11,7 @@ from ProjectManagement import settings
 from django.shortcuts import get_object_or_404
 import random
 from datetime import timedelta
+from .encryption import encryptOtp, decryptOtp
 
 class AdminTokenView(TokenObtainPairView):
     serializer_class = AdminToken
@@ -30,13 +31,14 @@ class SendOTP(APIView):
         mail = request.data['email']
         user = get_object_or_404(User,email=mail)
         otp = str(random.randint(100000, 999999))
+        encryptedOtp = encryptOtp(otp)
         subject = 'Login OTP'
         message = f'Your one time password for Login is {otp}'
         from_mail = settings.EMAIL_HOST_USER
         send_mail(subject, message, from_mail, [mail])
         token = AccessToken.for_user(user)
         token.set_exp(lifetime=timedelta(minutes=2))
-        token['otp'] = otp
+        token['otp'] = encryptedOtp
         token['email'] = mail
         return Response({'otp_token': str(token),}, status=status.HTTP_200_OK)
 
@@ -46,12 +48,14 @@ class VerifyOTP(APIView):
         userOTP = request.data.get('otp')
         try:
             token = AccessToken(otpToken)
-            otp = token['otp']
+            encryptedOtp = token['otp']
+            decryptedOtp = decryptOtp(encryptedOtp)
             email = token['email']
-            if otp == userOTP:
+            if decryptedOtp == userOTP:
                 user = get_object_or_404(User,email=email)
                 refreshToken = RefreshToken.for_user(user)
-                return Response({'refresh_token': str(refreshToken), 'access_token': str(refreshToken.access_token)}, status=status.HTTP_200_OK)
+                role = 'HR' if user.is_hr else 'TL' if user.is_tl else 'Employee'
+                return Response({'refresh_token': str(refreshToken), 'access_token': str(refreshToken.access_token), 'role':role},status=status.HTTP_200_OK)
             else:
                  return Response({"message": "Invalid OTP"}, status=status.HTTP_400_BAD_REQUEST)
         except TokenError:
