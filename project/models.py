@@ -41,7 +41,7 @@ class Task(models.Model):
     taskDescription = models.TextField()
     statusChoices = [('backlog', 'Backlog'), ('inProgress', 'In Progress'), ('completed', 'Completed')]
     status = models.CharField(max_length=30, choices=statusChoices, default='backlog')
-    project = models.ForeignKey(Projects, related_name='tasks', on_delete=models.CASCADE)
+    project = models.ForeignKey(Projects, related_name='tasks', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.taskName    
