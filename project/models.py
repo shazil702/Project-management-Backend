@@ -22,13 +22,6 @@ class Client(models.Model):
     def __str__(self):
         return self.clientName
 
-class Task(models.Model):
-    taskName = models.CharField(max_length=300)
-    taskDescription = models.TextField()
-    statusChoices = [('backlog', 'Backlog'), ('inProgress', 'In Progress'), ('completed', 'Completed')]
-    status = models.CharField(max_length=30, choices=statusChoices, default='backlog')
-    
-
     
 class Projects(models.Model):
     statusChoices = [('notStarted', 'Not Started'), ('inProgress', 'In Progress'), ('completed', 'Completed')]
@@ -42,3 +35,13 @@ class Projects(models.Model):
     
     def __str__(self):
         return self.projectName
+    
+class Task(models.Model):
+    taskName = models.CharField(max_length=300)
+    taskDescription = models.TextField()
+    statusChoices = [('backlog', 'Backlog'), ('inProgress', 'In Progress'), ('completed', 'Completed')]
+    status = models.CharField(max_length=30, choices=statusChoices, default='backlog')
+    project = models.ForeignKey(Projects, related_name='tasks', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.taskName    
