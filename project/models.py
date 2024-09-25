@@ -37,6 +37,7 @@ class Projects(models.Model):
         return self.projectName
     
 class Task(models.Model):
+    user = models.ForeignKey(User, related_name='tasks', limit_choices_to={'is_employee': True}, on_delete=models.CASCADE)
     taskName = models.CharField(max_length=300)
     taskDescription = models.TextField()
     statusChoices = [('backlog', 'Backlog'), ('inProgress', 'In Progress'), ('completed', 'Completed')]
