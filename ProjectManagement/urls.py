@@ -6,4 +6,5 @@ urlpatterns = [
     path('authentication/',include('Authentication.urls')),
     path('hr/',include('Hr.urls')),
     path('project/',include('project.urls')),
+    path('employee/',include('Employee.urls')),
 ]
