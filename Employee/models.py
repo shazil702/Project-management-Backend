@@ -14,7 +14,7 @@ class EmployeeProfile(models.Model):
         return f'{self.employee.username} Profile'
 
 class EmployeePersonalInfo(models.Model):
-    employee = models.OneToOneField(User, related_name='personal_info', on_delete=models.CASCADE, limit_choices_to={'is_employee':True})
+    profile = models.OneToOneField(EmployeeProfile, on_delete=models.CASCADE,)
     idNumber = models.CharField(max_length=100)
     pan = models.CharField(max_length=10)
     dob = models.DateField()
@@ -26,6 +26,6 @@ class EmployeePersonalInfo(models.Model):
     salaryAmount = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f'{self.employee.username} Personal Info'
+        return f'{self.profile} Personal Info'
 
 

@@ -11,6 +11,6 @@ class EmployeePersonalInfoSerializer(serializers.ModelSerializer):
         model = EmployeePersonalInfo
         fields = '__all__'
 
-class EmployeeDetailsSerializer(serializers.ModelSerializer):
+class EmployeeDetailsSerializer(serializers.Serializer):
     profile = EmployeeProfileSerializer()
     personal_info = EmployeePersonalInfoSerializer()

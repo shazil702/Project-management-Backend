@@ -9,7 +9,7 @@ class EmployeeDetailsView(RetrieveUpdateAPIView):
 
     def get(self, request, *args, **kwargs):
         profile = get_object_or_404(EmployeeProfile, employee=request.user)
-        personalInfo = get_object_or_404(EmployeePersonalInfo, employee=request.user)
+        personalInfo = get_object_or_404(EmployeePersonalInfo, profile=profile)
         serializer = self.get_serializer({
             'profile': profile,
             'personal_info': personalInfo,
