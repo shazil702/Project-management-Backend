@@ -5,7 +5,7 @@ from project.models import Team
 User = get_user_model()
 
 class EmployeeProfile(models.Model):
-    employee = models.ForeignKey(User, related_name='employee', limit_choices_to={'is_employee':True}, on_delete=models.CASCADE)
+    employee = models.OneToOneField(User, related_name='employee', limit_choices_to={'is_employee':True}, on_delete=models.CASCADE)
     joined_date = models.DateField()
     team = models.ForeignKey(Team, related_name='employee_team', on_delete=models.SET_NULL, null=True, blank=True)
     department = models.CharField(max_length=255)

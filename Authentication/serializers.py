@@ -6,6 +6,15 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id','username', 'email', 'is_superuser', 'is_hr', 'is_tl', 'is_employee', 'phone']
+    
+    def __init__(self, *args, **kwargs):
+        fields = kwargs.pop('fields',None)
+        super(UserSerializer, self).__init__(*args, **kwargs)
+        if fields:
+            allowed = set(fields)
+            exsisting = set(self.fields)
+            for field_name in exsisting - allowed:
+                self.fields.pop(field_name)
 
 class AdminToken(TokenObtainPairSerializer):
     @classmethod
