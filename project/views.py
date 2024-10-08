@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Projects, Client, Task
 from .serializer import Project_Serializer, Client_Serializer, Task_Serializer
-from rest_framework import status
+from rest_framework import status, generics
 
 class ProjectList(APIView):
     def get(self, request):
@@ -25,3 +25,14 @@ class TaskDetailView(APIView):
             return Response(serializer.data)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class UserProjectView(generics.ListAPIView):
+    serializer_class = Project_Serializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Projects.objects.filter(team__teamMembers=user)
+    
+    def get_serializer(self, *args, **kwargs):
+        kwargs['fields'] = ['id', 'projectName', 'status', 'startDate', 'dueDate', 'client']
+        return super(UserProjectView, self).get_serializer(*args, **kwargs)
