@@ -3,12 +3,20 @@ from rest_framework.views import APIView
 from .models import Projects, Client, Task
 from .serializer import Project_Serializer, Client_Serializer, Task_Serializer
 from rest_framework import status, generics
+from django.shortcuts import get_object_or_404
 
 class ProjectList(APIView):
-    def get(self, request):
-        projects = Projects.objects.all()
-        serializer = Project_Serializer(projects, many=True)
-        return Response(serializer.data)
+    def get(self, request, project_id=None):
+        try:
+            if project_id:
+                project = get_object_or_404(Projects, id=project_id)
+                serializer = Project_Serializer(project)
+                return Response(serializer.data)
+            projects = Projects.objects.all()
+            serializer = Project_Serializer(projects, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 class ClientListView(APIView):
     def get(self, request):
