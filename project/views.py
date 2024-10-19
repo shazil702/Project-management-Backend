@@ -33,6 +33,21 @@ class TaskDetailView(APIView):
             return Response(serializer.data)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, project_id):
+        try:
+            project = Projects.objects.get(id=project_id)
+            tasks_data = request.data
+            for task_data in tasks_data:
+                task = Task.objects.get(id=task_data['id'], project=project, user=request.user)
+                serializer = Task_Serializer(task, data=task_data, partial=True)
+                if serializer.is_valid():
+                    serializer.save()
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "Tasks updated successfully"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserProjectView(generics.ListAPIView):
     serializer_class = Project_Serializer

@@ -18,6 +18,7 @@ class Client(models.Model):
     clientPhone = PhoneNumberField(unique=True)
     clientEmail = models.EmailField(unique=True)
     clientAdress = models.TextField()
+    clientImage = models.ImageField(upload_to='images', blank=True, null=True)
 
     def __str__(self):
         return self.clientName

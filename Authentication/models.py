@@ -10,6 +10,7 @@ class User(AbstractUser):
     is_tl = models.BooleanField(default=False)
     is_employee = models.BooleanField(default=True)
     phone = PhoneNumberField(null=False, blank=False, unique=True)
+    img = models.ImageField(null=True, blank=True, unique=True, upload_to='images')
     groups = models.ManyToManyField(Group, related_name='custom_users_group', blank=True, related_query_name='user')
     user_permissions = models.ManyToManyField(Permission, related_name='custom_user_permissions', blank=True, related_query_name='user_permission')
 
