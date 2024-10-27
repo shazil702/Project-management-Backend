@@ -15,6 +15,7 @@ class Client_Serializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class Task_Serializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()
     class Meta:
         model = Task
         fields = '__all__'
