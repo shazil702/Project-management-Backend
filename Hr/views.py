@@ -6,6 +6,6 @@ from rest_framework import status
 
 class EmployeeList(APIView):
     def get(self, request):
-        employees = User.objects.filter(is_employee = True)
+        employees = User.objects.exclude(username=request.user.username)
         serializer = UserSerializer(employees, many = True)
         return Response(serializer.data, status=status.HTTP_200_OK)

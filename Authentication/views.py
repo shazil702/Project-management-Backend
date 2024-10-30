@@ -55,7 +55,7 @@ class VerifyOTP(APIView):
                 user = get_object_or_404(User,email=email)
                 refreshToken = RefreshToken.for_user(user)
                 role = 'HR' if user.is_hr else 'TL' if user.is_tl else 'Employee'
-                return Response({'refresh_token': str(refreshToken), 'access_token': str(refreshToken.access_token), 'role':role},status=status.HTTP_200_OK)
+                return Response({'refresh_token': str(refreshToken), 'access_token': str(refreshToken.access_token), 'role':role, 'name':user.username},status=status.HTTP_200_OK)
             else:
                  return Response({"message": "Invalid OTP"}, status=status.HTTP_400_BAD_REQUEST)
         except TokenError:
